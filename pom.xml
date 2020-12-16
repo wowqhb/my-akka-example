@@ -11,6 +11,7 @@
     <modules>
         <module>tell-and-ask</module>
         <module>message</module>
+        <module>simple-cluster-example</module>
     </modules>
 
     <repositories>
