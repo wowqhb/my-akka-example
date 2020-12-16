@@ -33,15 +33,21 @@ public class ClusterMonitorActor extends AbstractActor {
         return receiveBuilder()
                 .match(ClusterEvent.MemberEvent.class, this::apply)
                 .match(ClusterEvent.UnreachableMember.class, this::apply)
-                .matchEquals("leave", this::apply)
+                .matchEquals("leave", this::leave)
+                .matchEquals("shutdown", this::shutdown)
                 .matchAny(m -> log.info("Other: {}", m)).build();
+    }
+
+    private void shutdown(String m) {
+        log.info("shutdown: {}", m);
+        context().system().terminate();
     }
 
     private void apply(ClusterEvent.UnreachableMember m) {
         log.info("UnreachableMember: {}", m);
     }
 
-    private void apply(String m) {
+    private void leave(String m) {
         log.info("leave: {}", m);
         cluster.leave(cluster.selfAddress());
     }
