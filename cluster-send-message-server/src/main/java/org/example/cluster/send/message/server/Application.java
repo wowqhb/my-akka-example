@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.contrib.pattern.ClusterReceptionistExtension;
+import akka.routing.BalancingPool;
 import com.typesafe.config.ConfigFactory;
 import org.example.cluster.send.message.server.actor.ClusterMonitorActor;
 import org.example.cluster.send.message.server.actor.WorkerActor;
@@ -34,7 +35,9 @@ public class Application {
         ActorSystem system = ActorSystem.create("Akkademy", ConfigFactory.parseMap(overrides)
                 .withFallback(ConfigFactory.load()));
         system.actorOf(Props.create(ClusterMonitorActor.class), "cluster-monitor-actor");
-        ActorRef workerActor = system.actorOf(Props.create(WorkerActor.class), "worker-actor");
+//        ActorRef workerActor = system.actorOf(Props.create(WorkerActor.class), "worker-actor");
+        ActorRef workerActor = system.actorOf(new BalancingPool(5).props(Props.create(WorkerActor.class)),
+                "worker-actor");
         ((ClusterReceptionistExtension) akka.contrib.pattern.ClusterReceptionistExtension.apply(system))
                 .registerService(workerActor);
     }

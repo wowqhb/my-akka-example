@@ -51,22 +51,10 @@ public class Application {
                 "/user/worker-actor", new ChildMessage.Request().setMessage("test 123"),
                 false), timeout), timeout.duration());
         //tell
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
-        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
-                System.currentTimeMillis()), false), ActorRef.noSender());
+        for (int i = 100; i > 0; i--) {
+            receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d-%03d",
+                    System.currentTimeMillis(), i), false), ActorRef.noSender());
+        }
 
     }
 }
