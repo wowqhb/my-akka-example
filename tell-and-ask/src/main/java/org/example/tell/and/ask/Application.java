@@ -8,6 +8,7 @@ import akka.util.Timeout;
 import lombok.extern.slf4j.Slf4j;
 import org.example.message.HelloMsg;
 import org.example.tell.and.ask.actors.RootActor;
+import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
@@ -33,7 +34,7 @@ public class Application {
         //ask2
         ask = Patterns.ask(system.actorSelection("/user/root-actor/hello-actor"),
                 new HelloMsg.CleanListRequest(), Timeout.apply(1, TimeUnit.SECONDS));
-        result = ask.result(Duration.apply(1, TimeUnit.SECONDS), null);
+        result = Await.result(ask, Duration.apply(1, TimeUnit.SECONDS));
         log.info("{}", result);
     }
 }

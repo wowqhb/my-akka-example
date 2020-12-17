@@ -20,12 +20,12 @@ public class Application {
         ActorRef node25252 = createNode(25252);
         ActorRef node25253 = createNode(25253);
         ActorRef node25254 = createNode(25254);
-        Thread.sleep(10000);
-        node25253.tell("leave", ActorRef.noSender());
+        /*Thread.sleep(10000);
+        node25253.tell("leave", ActorRef.noSender());*/
         Thread.sleep(10000);
         node25254.tell("leave", ActorRef.noSender());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             node25251.tell("leave", ActorRef.noSender());
             node25252.tell("leave", ActorRef.noSender());
             node25253.tell("leave", ActorRef.noSender());
@@ -42,17 +42,17 @@ public class Application {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
             }
-        }, "ShutdownHook"));
+        }, "ShutdownHook"));*/
     }
 
     private static ActorRef createNode(int port) {
         // Override the configuration of the port
         Map<String, Object> overrides = new HashMap<String, Object>(1) {
             {
-                put("akka.remote.artery.canonical.port", port);
+                put("akka.remote.netty.tcp.port", port);
             }
         };
-        ActorSystem system = ActorSystem.create("ClusterSystem", ConfigFactory.parseMap(overrides)
+        ActorSystem system = ActorSystem.create("Akkademy", ConfigFactory.parseMap(overrides)
                 .withFallback(ConfigFactory.load()));
         ActorRef actorRef = system.actorOf(Props.create(ClusterMonitorActor.class), "cluster-monitor-actor");
         return actorRef;
