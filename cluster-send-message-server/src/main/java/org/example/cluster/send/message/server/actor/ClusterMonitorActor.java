@@ -57,7 +57,8 @@ public class ClusterMonitorActor extends AbstractActor {
 
     private void apply(ClusterEvent.MemberEvent m) {
         if (m instanceof ClusterEvent.MemberUp) {
-            System.out.println("member up: " + m.member().address());
+            log.info("member up: {}", m.member().address());
+            log.info("leader: {}", cluster.state().leader());
         }
         log.info("MemberEvent: {}", m);
     }

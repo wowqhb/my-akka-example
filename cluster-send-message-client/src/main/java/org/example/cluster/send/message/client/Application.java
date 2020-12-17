@@ -37,5 +37,36 @@ public class Application {
         Future<Object> f = Patterns.ask(receptionist, send, timeout);
         Object result = Await.result(f, timeout.duration());
         log.info("result: {}", result);
+
+        Await.result(Patterns.ask(receptionist, new ClusterClient.Send(
+                "/user/worker-actor", new ChildMessage.Request().setMessage("test 123"),
+                false), timeout), timeout.duration());
+        Await.result(Patterns.ask(receptionist, new ClusterClient.Send(
+                "/user/worker-actor", new ChildMessage.Request().setMessage("test 123"),
+                false), timeout), timeout.duration());
+        Await.result(Patterns.ask(receptionist, new ClusterClient.Send(
+                "/user/worker-actor", new ChildMessage.Request().setMessage("test 123"),
+                false), timeout), timeout.duration());
+        Await.result(Patterns.ask(receptionist, new ClusterClient.Send(
+                "/user/worker-actor", new ChildMessage.Request().setMessage("test 123"),
+                false), timeout), timeout.duration());
+        //tell
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+        receptionist.tell(new ClusterClient.Send("/user/worker-actor", String.format("time: %d",
+                System.currentTimeMillis()), false), ActorRef.noSender());
+
     }
 }

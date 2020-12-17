@@ -1,6 +1,7 @@
 package org.example.cluster.send.message.server.actor;
 
 import akka.actor.AbstractActor;
+import akka.cluster.Cluster;
 import akka.japi.pf.ReceiveBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.message.ChildMessage;
@@ -23,13 +24,13 @@ public class WorkerActor extends AbstractActor {
     }
 
     private void onMessage(ChildMessage.Request m) {
-        log.info("receive: {}", m);
+        log.info("{} receive: {}", Cluster.get(context().system()).selfAddress(), m);
         sender().tell(new ChildMessage.Response().setRequestMessage(m.getMessage())
                 .setReceivedTime(System.currentTimeMillis()), self());
     }
 
     private void onAnyMessage(Object m) {
-        log.info("Other: {}", m);
+        log.info("{} Other: {}", Cluster.get(context().system()).selfAddress(), m);
         unhandled(m);
     }
 }
