@@ -9,18 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tell-and-ask</artifactId>
-
+    <artifactId>cluster-send-message-client</artifactId>
     <dependencies>
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor_${scala.binary.version}</artifactId>
-            <version>${akka.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>message</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-cluster_${scala.binary.version}</artifactId>
+            <version>${akka.version}</version>
         </dependency>
     </dependencies>
 
@@ -30,7 +29,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.example.tell.and.ask.Application</mainClass>
+                    <mainClass>org.example.cluster.send.message.client.Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -42,5 +41,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

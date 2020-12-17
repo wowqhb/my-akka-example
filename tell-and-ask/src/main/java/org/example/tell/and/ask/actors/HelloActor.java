@@ -1,6 +1,7 @@
 package org.example.tell.and.ask.actors;
 
 import akka.actor.AbstractActor;
+import akka.japi.pf.ReceiveBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.message.HelloMsg;
 
@@ -23,13 +24,14 @@ public class HelloActor extends AbstractActor {
         }
     };
 
-    @Override
-    public Receive createReceive() {
-        return receiveBuilder()
-                .match(HelloMsg.Request.class, this::onMessage)
-                .match(HelloMsg.CleanListRequest.class, this::onMessage)
-                .matchAny(this::onMessage)
-                .build();
+    {
+        receive(
+                ReceiveBuilder
+                        .match(HelloMsg.Request.class, this::onMessage)
+                        .match(HelloMsg.CleanListRequest.class, this::onMessage)
+                        .matchAny(this::onAnyMessage)
+                        .build()
+        );
     }
 
     private void onMessage(HelloMsg.CleanListRequest m) {
@@ -49,7 +51,7 @@ public class HelloActor extends AbstractActor {
         }), self());
     }
 
-    private void onMessage(Object m) {
+    private void onAnyMessage(Object m) {
         log.info("Object: {}", m);
         unhandled(m);
     }

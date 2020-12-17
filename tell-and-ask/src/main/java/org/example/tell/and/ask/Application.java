@@ -12,7 +12,6 @@ import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * @author Karol
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeoutException;
  */
 @Slf4j
 public class Application {
-    public static void main(String[] args) throws TimeoutException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         ActorSystem system = ActorSystem.create("system");
         ActorRef rootActor = system.actorOf(Props.create(RootActor.class), "root-actor");
         //tell

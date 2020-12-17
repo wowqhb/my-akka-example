@@ -3,6 +3,7 @@ package org.example.tell.and.ask.actors;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
+import akka.japi.pf.ReceiveBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.message.HelloMsg;
 
@@ -15,15 +16,16 @@ import org.example.message.HelloMsg;
 public class RootActor extends AbstractActor {
     ActorRef child = context().actorOf(Props.create(HelloActor.class), "hello-actor");
 
-    @Override
-    public Receive createReceive() {
-        return receiveBuilder()
-                .match(HelloMsg.Request.class, this::onMessage)
-                .matchAny(this::onMessage)
-                .build();
+    {
+        receive(
+                ReceiveBuilder
+                        .match(HelloMsg.Request.class, this::onMessage)
+                        .matchAny(this::onAnyMessage)
+                        .build()
+        );
     }
 
-    private void onMessage(Object m) {
+    private void onAnyMessage(Object m) {
         log.info("Object: {}", m);
         unhandled(m);
     }

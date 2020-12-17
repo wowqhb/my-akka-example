@@ -1,9 +1,10 @@
-package org.example.simple.cluster.example.actor;
+package org.example.cluster.send.message.server.actor;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.Props;
 import akka.cluster.Cluster;
 import akka.cluster.ClusterEvent;
-import akka.japi.pf.ReceiveBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,33 +18,34 @@ public class ClusterMonitorActor extends AbstractActor {
      * 初始化cluster
      */
     Cluster cluster = Cluster.get(context().system());
+    ActorRef childActor = context().actorOf(Props.create(ChildActor.class, cluster), "child-actor");
 
     @Override
     public void preStart() {
         // 订阅集群事件
         cluster.subscribe(self(), ClusterEvent.MemberEvent.class, ClusterEvent.UnreachableMember.class);
+        context().watch(childActor);
     }
 
     @Override
     public void postStop() {
         cluster.unsubscribe(self());
+        context().unwatch(childActor);
     }
 
-    {
-        receive(
-                ReceiveBuilder
-                        .match(ClusterEvent.MemberEvent.class, this::apply)
-                        .match(ClusterEvent.UnreachableMember.class, this::apply)
-                        .matchEquals("leave", this::leave)
-                        .matchEquals("shutdown", this::shutdown)
-                        .matchAny(m -> log.info("Other: {}", m))
-                        .build()
-        );
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder()
+                .match(ClusterEvent.MemberEvent.class, this::apply)
+                .match(ClusterEvent.UnreachableMember.class, this::apply)
+                .matchEquals("leave", this::leave)
+                .matchEquals("shutdown", this::shutdown)
+                .matchAny(m -> log.info("Other: {}", m)).build();
     }
 
     private void shutdown(String m) {
         log.info("shutdown: {}", m);
-        context().system().shutdown();
+        context().system().terminate();
     }
 
     private void apply(ClusterEvent.UnreachableMember m) {
