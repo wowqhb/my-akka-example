@@ -16,6 +16,7 @@
         <module>cluster-send-message-client</module>
         <module>simple-event-bus-example</module>
         <module>cluster-event-bus-example</module>
+        <module>simple-circuit-breaker</module>
     </modules>
 
     <repositories>

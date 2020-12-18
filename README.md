@@ -18,5 +18,7 @@ akka example, send message(tell &amp; ask), cluster
 <module>simple-event-bus-example</module>
 <!-- 集群订阅发布测试 -->
 <module>cluster-event-bus-example</module>
+<!-- 单机熔断测试 -->
+<module>simple-circuit-breaker</module>
 ```
 
