@@ -14,5 +14,9 @@ akka example, send message(tell &amp; ask), cluster
 <module>cluster-send-message-server</module>
 <!-- 创建集群客户端，发送消息到集群服务器端并接收响应 -->
 <module>cluster-send-message-client</module>
+<!-- 单机订阅发布测试 -->
+<module>simple-event-bus-example</module>
+<!-- 集群订阅发布测试 -->
+<module>cluster-event-bus-example</module>
 ```
 
